@@ -6,6 +6,7 @@ package com.lojafluxo;
 
 import com.lojafluxo.domain.Cliente;
 import com.lojafluxo.domain.Funcionario;
+import com.lojafluxo.infrastructure.ClienteRepository;
 import com.lojafluxo.infrastructure.FuncionarioRepository;
 import com.lojafluxo.infrastructure.JPAConnectionFactory;
 
@@ -40,6 +41,21 @@ public class LojaFluxo {
         System.out.println(funcionarioRepository.findAll().toString());
 
         funcionarioRepository.delete(3);
+
+        Cliente cliente = Cliente.newCliente("Pedronez", "332.122.332-12","rua longe", 22, "pedroh.fokus@gmail.com", "(11)97698-4325",12000);
+        Cliente cliente2 = Cliente.newCliente("Pedronez2", "332.122.332-12","rua longe", 22, "pedroh.fokus@gmail.com", "(11)97698-4325",12000);
+
+        ClienteRepository clienteRepository = ClienteRepository.newClienteRepository(JPAConnectionFactory.getInstance());
+        clienteRepository.save(cliente);
+        clienteRepository.save(cliente2);
+        System.out.println(clienteRepository.findById(1).toString());
+        System.out.println(clienteRepository.findAll().toString());
+
+        cliente.setLimitCredit(100000);
+
+        clienteRepository.update(cliente);
+
+        clienteRepository.delete(2);
 
         try{
             Thread.sleep(13000);

@@ -1,29 +1,27 @@
 package com.lojafluxo.infrastructure;
 
-import com.lojafluxo.domain.Funcionario;
+import com.lojafluxo.domain.Cliente;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-
-import java.util.ArrayList;
 import java.util.List;
 
-public class FuncionarioRepository {
-    private final EntityManagerFactory entityManagerFactory;
+public class ClienteRepository {
+    private EntityManagerFactory entityManagerFactory;
 
-    private FuncionarioRepository(EntityManagerFactory entityManagerFactory){
+    private ClienteRepository(EntityManagerFactory entityManagerFactory){
         this.entityManagerFactory = entityManagerFactory;
     }
 
-    public static FuncionarioRepository newFuncionarioRepository(EntityManagerFactory entityManagerFactory){
-        return new FuncionarioRepository(entityManagerFactory);
+    public static ClienteRepository newClienteRepository(EntityManagerFactory entityManagerFactory){
+        return new ClienteRepository(entityManagerFactory);
     }
 
     //CREATE
-    public void save(Funcionario funcionario){
+    public void save(Cliente cliente){
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try{
+        try {
             entityManager.getTransaction().begin();
-            entityManager.persist(funcionario);
+            entityManager.persist(cliente);
             entityManager.getTransaction().commit();
         } catch (RuntimeException e) {
             entityManager.getTransaction().rollback();
@@ -33,32 +31,32 @@ public class FuncionarioRepository {
         }
     }
 
-    // READ BY ID
-    public Funcionario findById(long id){
+    //READ BY ID
+    public Cliente findById(long id){
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()){
-            return entityManager.find(Funcionario.class, id);
+            return entityManager.find(Cliente.class, id);
         } catch (RuntimeException e) {
             throw new RuntimeException(e);
         }
     }
 
     //READ ALL
-    public List<Funcionario> findAll(){
-        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
-            return entityManager.createQuery("Select f FROM Funcionario f", Funcionario.class).getResultList();
+    public List<Cliente> findAll(){
+        try(EntityManager entityManager = entityManagerFactory.createEntityManager()){
+            return entityManager.createQuery("SELECT c FROM Cliente c", Cliente.class).getResultList();
         } catch (RuntimeException e) {
             throw new RuntimeException(e);
         }
     }
 
     //UPDATE
-    public Funcionario update(Funcionario funcionario){
+    public Cliente update(Cliente updatedCliente){
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try {
+        try{
             entityManager.getTransaction().begin();
-            entityManager.merge(funcionario);
+            entityManager.merge(updatedCliente);
             entityManager.getTransaction().commit();
-            return funcionario;
+            return updatedCliente;
         } catch (RuntimeException e) {
             entityManager.getTransaction().rollback();
             throw new RuntimeException(e);
@@ -67,13 +65,13 @@ public class FuncionarioRepository {
         }
     }
 
-    //DELETE
+    //DELETE BY ID
     public void delete(long id){
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try{
+        try {
             entityManager.getTransaction().begin();
-            Funcionario deletedFuncionario = entityManager.find(Funcionario.class, id);
-            entityManager.remove(deletedFuncionario);
+            Cliente clienteDeleted = entityManager.find(Cliente.class, id);
+            entityManager.remove(clienteDeleted);
             entityManager.getTransaction().commit();
         } catch (RuntimeException e) {
             entityManager.getTransaction().rollback();
