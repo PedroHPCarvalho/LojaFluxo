@@ -21,6 +21,7 @@ public class Funcionario extends Pessoa {
     private String departamento;
     private double salario;
 
+    // Construtor privado para proteger a criação de objetos, para serem gerados sempre objetos validos
     private Funcionario(String nome, String cpf, String endereco, int idade, int funcional, String cargo, String departamento, double salario) {
         super(nome, cpf, endereco, idade);
         this.funcional = funcional;
@@ -29,8 +30,10 @@ public class Funcionario extends Pessoa {
         this.salario = salario;
     }
 
+    // Construtor protegido para ser usado pelo JPA, onde o JPA pode criar objetos da classe sem a necessidade de usar o Factory Method, mas não pode ser usado por outras classes
     protected Funcionario(){}
 
+    // Factory Method, traz um metodo de criação seguro, onde o objeto criado sempre sera valido
     public static Funcionario newFuncionario(
             String nome,
             String cpf,
@@ -41,6 +44,21 @@ public class Funcionario extends Pessoa {
             String departamento,
             double salario){
         return new Funcionario(nome,cpf,endereco,idade,funcional,cargo,departamento,salario);
+    }
+
+    @Override
+    public String toString() {
+        return "Funcionario{" +
+                "id=" + id +
+                "nome='" + getNome() + '\'' +
+                "cpf='" + getCpf() + '\'' +
+                "endereco='" + getEndereco() + '\'' +
+                "idade='" + getIdade() + '\'' +
+                ", funcional=" + funcional +
+                ", cargo='" + cargo + '\'' +
+                ", departamento='" + departamento + '\'' +
+                ", salario=" + salario +
+                '}';
     }
 
     public long getId() {
@@ -58,7 +76,6 @@ public class Funcionario extends Pessoa {
     public double getSalario() {
         return salario;
     }
-
 
     public void setSalario(double salario) {
         this.salario = salario;
